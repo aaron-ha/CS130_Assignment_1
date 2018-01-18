@@ -10,8 +10,13 @@ OBJS_GL := src/main-gl.o
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
-	LIBS = -framework OpenGL -framework GLUT -lpng
-	CXXFLAGS += -Wno-deprecated-declarations
+	MAC_INCLUDE_DIR = #-I<folder_containing png.h>
+	MAC_G_INCLUDE_DIR = #-I<folder containing GL/gl.h>
+	MAC_LIB_DIR = #-L<folder containing libpng.a>
+	MAC_G_LIB_DIR = #-L<folder containing libGL.dylib>
+	LIBS += $(MAC_LIB_DIR)
+	GLLIBS = $(MAC_G_LIB_DIR) -framework OpenGL -framework GLUT -lpng
+	CXXFLAGS += -Wno-deprecated-declarations $(MAC_INCLUDE_DIR)
 endif
 
 TARGET = ray_tracer 
@@ -28,7 +33,7 @@ ray_tracer_preview: $(OBJS) ${OBJS_GL}
 $(OBJS) $(OBJS_NOGL): %.o:%.cpp
 	$(CXX) $(CXXFLAGS) -c -DNO_OPENGL -o $@ $<
 $(OBJS_GL): %-gl.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) $(MAC_G_INCLUDE_DIR) -c -o $@ $<
 
 clean:
 	rm -f src/*.o src/*.d src/*~ src/*.bak $(TARGET) ray_tracer_preview
@@ -41,4 +46,5 @@ clean:
 ifneq "$(MAKECMDGOALS)" "clean"
 -include ${SRCS:.cpp=.d}
 endif
+
 
