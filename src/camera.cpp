@@ -41,6 +41,8 @@ void Camera::Set_Resolution(const ivec2& number_pixels_input)
 // Find the world position of the input pixel
 vec3 Camera::World_Position(const ivec2& pixel_index)
 {
-    vec3 result = (film_position + (horizontal_vector*Cell_Center(pixel_index))+(vertical_vector*Cell_Center(pixel_index);
+    vec3 result;
+    vec2 pixel_pos = Cell_Center(pixel_index);
+    result = film_position + horizontal_vector*pixel_pos[0] + vertical_vector*pixel_pos[1];
     /*world_position (pixel) -> Fp +uCx +vCy */
 }
