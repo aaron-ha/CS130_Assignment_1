@@ -23,7 +23,7 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
 	   b = dot(t,v), 
 	   c = dot(v,v) - rsqr;
 
-    double discriminate = (b*b) - (c - rsqr);
+    double discriminate = (b*b) - c;
 
     if(discriminate > 0){
          double t1 = (-b + pow(discriminate, 1/2)),
