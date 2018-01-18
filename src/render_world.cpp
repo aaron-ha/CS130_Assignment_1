@@ -45,8 +45,8 @@ Object* Render_World::Closest_Intersection(const Ray& ray,Hit& hit)
 // set up the initial view ray and call
 void Render_World::Render_Pixel(const ivec2& pixel_index)
 {
-    Ray ray; // TODO: set up the initial view ray here
-    ray(pixel_index.position, World_Position());
+    Ray ray; // TODO: set up the initial view ray here 
+    ray(camera.position, camera.World_Position(pixel_index) - camera.position); 
     //Cast_Ray(ray);
     vec3 color=Cast_Ray(ray,1);
     camera.Set_Pixel(pixel_index,Pixel_Color(color));
@@ -64,9 +64,18 @@ void Render_World::Render()
 vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
 {
     // TODO
-    vec3 color;
-
-    // determine the color here
+    vec3 color, dummy;
+    Hit hit;
+    Object* obj = Closest_Intersection(ray, hit);
+  
+    if(obj != nullptr){
+	    intersect = ray.Point(hit.t);
+	    norm = obj->Normal(intersect);
+	    color = obj->material_shader->Shade_Surface(ray, dummy, dummy, recursion_depth);
+    }
+    else{
+	    color = background_shader->Shade_Surface(ray, dummy, dummy, recursion_depth);
+    }
 
     return color;
 }
