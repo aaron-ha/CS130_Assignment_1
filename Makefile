@@ -10,7 +10,7 @@ OBJS_GL := src/main-gl.o
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
-	MAC_INCLUDE_DIR = -I/Users/Aaron/Documents/UCR/CS\ 130/proj-rt-files/src
+	MAC_INCLUDE_DIR = -I/Users/Aaron/Documents/UCR/CS\ 130/Lab2_Checkpoint_1/src
 	MAC_G_INCLUDE_DIR = #-I<folder containing GL/gl.h>
 	MAC_LIB_DIR = #-L<folder containing libpng.a>
 	MAC_G_LIB_DIR = #-L<folder containing libGL.dylib>
