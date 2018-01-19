@@ -30,10 +30,11 @@ Object* Render_World::Closest_Intersection(const Ray& ray,Hit& hit)
 
     double min_t = std::numeric_limits<double>::max();
     for(Object* obj : objects){
-	std::vector<Hit> hitList;
+	std::vector<Hit> hitList;	
+	obj->Intersection(ray, hitList);
 	
-	if(obj->Intersection(ray, hitList))
-		for(size_t i = 0; i < hitList.size(); i++)
+	if(!hitList.empty())
+		for(unsigned int i = 0; i < hitList.size(); i++)
 			if(hitList.at(i).t < min_t && hitList.at(i).t > small_t) {
 				hit = hitList.at(i);
 				closestObj = obj;

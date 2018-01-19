@@ -15,12 +15,12 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
     // TODO
     vec3 t = ray.endpoint, 
 	 u = ray.direction;
-    vec3 v = u - this->center;
+    vec3 v = t - this->center;
 
     double rsqr = this->radius*this->radius;
     
-    double a = dot(t,t), 
-	   b = dot(t,v), 
+    double a = dot(u,u), 
+	   b = dot(u,v), 
 	   c = dot(v,v) - rsqr;
 
     double discriminate = (b*b) - c;
@@ -36,7 +36,7 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
 	 if(t2 >= 0) hits.push_back(two);
     }
 
-    // return false;
+   // return false;
 }
 
 vec3 Sphere::Normal(const vec3& point) const
