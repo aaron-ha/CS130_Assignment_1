@@ -15,15 +15,23 @@ Intersection(const Ray& ray, std::vector<Hit>& hits) const
     vec3 w = ray.direction;
     
     double intersects = dot(this->normal, w);
-    double t = -(dot(this->normal,(u - x1))/(intersects));
+    double t = dot(this->normal,(x1 - u)/(intersects));
 
-    Hit hit1 = {this, t, true};
-
-    if (t >= 0){ 
-	    hits.push_back(hit1);
-	    return true;
+    Hit hit1;
+     
+    if(intersects == 0){
+	hit1 = {this, 0, true};
+	hits.push_back(hit1);
+	return true;
     }
-    return false;
+    else if (t > 0){ 
+        hit1 = {this, t, true};	
+	hits.push_back(hit1);
+	return true;
+    }
+    else{
+	return false;
+    }
 }
 
 vec3 Plane::

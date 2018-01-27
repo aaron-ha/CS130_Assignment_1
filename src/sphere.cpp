@@ -14,29 +14,43 @@ bool Sphere::Intersection(const Ray& ray, std::vector<Hit>& hits) const
 {
     // TODO
     vec3 t = ray.endpoint, 
-	 u = ray.direction;
+    u = ray.direction;
     vec3 v = t - this->center;
-
+    
     double rsqr = this->radius*this->radius;
     
-    double a = dot(u,u), 
-	   b = dot(u,v), 
-	   c = dot(v,v) - rsqr;
+    double a = 1, 
+    b = dot(u,v), 
+    c = dot(v,v) - rsqr;
 
     double discriminate = (b*b) - c;
 
-    if(discriminate > 0){
-         double t1 = (-b + pow(discriminate, 1/2)),
-		t2 = (-b - pow(discriminate, 1/2));
+    Hit one, two;
 
-	 Hit one = {this, t1, true},
-	     two = {this, t2, true};
+    one.object = this;
+    two.object = this;
 
-	 if(t1 >= 0) hits.push_back(one);
-	 if(t2 >= 0) hits.push_back(two);
+    one.ray_exiting = false;
+    two.ray_exiting = true;
+
+    if(discriminate > 0)
+    {
+       double t1 = (-b - pow(discriminate, 0.5)),
+       t2 = (-b + pow(discriminate, 0.5));
+
+       if(t1 >= 0)
+       {
+          one.t = t1;
+          hits.push_back(one);
+       }
+       if(t2 >= 0)
+       {
+           two.t = t2;
+           hits.push_back(two);
+       }
+       return true;
     }
-
-   // return false;
+    return false;
 }
 
 vec3 Sphere::Normal(const vec3& point) const
@@ -44,6 +58,7 @@ vec3 Sphere::Normal(const vec3& point) const
     vec3 normal;
     // TODO: set the normal
     normal = (point-this->center).normalized();
-   	    
+    
     return normal;
 }
+
