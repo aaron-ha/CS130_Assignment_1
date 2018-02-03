@@ -20,17 +20,17 @@ Intersection(const Ray& ray, std::vector<Hit>& hits) const
     Hit hit1;
      
     if(intersects == 0){
-	hit1 = {this, 0, true};
-	hits.push_back(hit1);
-	return true;
+		hit1 = {this, 0, true};
+		hits.push_back(hit1);
+		return true;
     }
     else if (t > 0){ 
         hit1 = {this, t, true};	
-	hits.push_back(hit1);
-	return true;
+		hits.push_back(hit1);
+		return true;
     }
     else{
-	return false;
+		return false;
     }
 }
 

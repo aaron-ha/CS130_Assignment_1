@@ -20,10 +20,9 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
 	// Use ray direction instead of light direction
 	// Ray_dir * 2 * dot(Ray_dir, N) * N
 	e = intersection_point;
-	r = ray.direction + (-1 * 2.0) * dot(ray.direction, n) * n;
+	r = ray.direction + (-2.0 * dot(ray.direction, n) * n);
 
 	Ray reflectedRay(e, r);
-	//reflectedRay.endpoint = reflectedRay.Point(0.00001);
 
 	recursion_depth++;
 

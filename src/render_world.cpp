@@ -49,7 +49,7 @@ void Render_World::Render_Pixel(const ivec2& pixel_index)
 {
     Ray ray(camera.position, (camera.World_Position(pixel_index) - camera.position).normalized()); 
     //Cast_Ray(ray);
-    vec3 color=Cast_Ray(ray,1);
+    vec3 color=Cast_Ray(ray,0);
     camera.Set_Pixel(pixel_index,Pixel_Color(color));
 }
 
@@ -69,20 +69,19 @@ vec3 Render_World::Cast_Ray(const Ray& ray,int recursion_depth)
     Hit hit;
     Object* obj = Closest_Intersection(ray, hit);
    
-    if(recursion_depth > recursion_depth_limit)
-    	return background_shader->Shade_Surface(ray, dummy, dummy, recursion_depth, hit.ray_exiting);
-    if(obj != nullptr){
+    //if(recursion_depth > recursion_depth_limit)
+            //return background_shader->Shade_Surface(ray, dummy, dummy, recursion_depth, hit.ray_exiting);
+    if(obj != nullptr && recursion_depth < recursion_depth_limit){
 	intersect = ray.Point(hit.t);
    	normal = obj->Normal(intersect);
 
-	color = obj->material_shader->Shade_Surface(ray, intersect, normal, recursion_depth, hit.ray_exiting
-			);
+	color = obj->material_shader->Shade_Surface(ray, intersect, normal, recursion_depth, hit.ray_exiting);
     }
     else{
-	color = background_shader->Shade_Surface(ray, dummy, dummy, recursion_depth, hit.ray_exiting);
+	color = background_shader->Shade_Surface(ray, dummy, dummy, recursion_depth, false);
     }
 
-    /*
+    /* Muzo's in class notes...
      * if (recursion_depth >= recursion_depth_limit)
      *     return background_shadower->Shade_surface(...)
      */

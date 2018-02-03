@@ -16,17 +16,13 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
 	for(unsigned int i = 0; i < world.lights.size(); i++){
 		vec3 l, n, lightColor, lightVector;	
 		lightVector = (world.lights[i]->position - intersection_point).normalized();
-
+		
 		Hit hitShadow;
-		Ray rayShadow(intersection_point, lightVector);
 
-		rayShadow.endpoint = rayShadow.Point(.001);
-
-		Object* obj = world.Closest_Intersection(rayShadow, hitShadow);
-
-		if(!world.enable_shadows 
-			|| (obj == nullptr 	|| ((lightVector - intersection_point).magnitude() 
-				<= (rayShadow.Point(hitShadow.t) - intersection_point).magnitude())) && world.enable_shadows) {
+		if(world.enable_shadows) {
+			Ray rayShadow(intersection_point, lightVector);
+			if (world.Closest_Intersection(rayShadow, hitShadow) && ((world.lights[i]->position - intersection_point).magnitude() > hitShadow.t)) continue;
+		}
 			//Diffuse
 	        //I_d = R_d*L_d*max(0,l*n)
 	        //max(x,y)
@@ -47,7 +43,6 @@ Shade_Surface(const Ray& ray,const vec3& intersection_point,
 			color += this->color_specular * lightColor *
 			         pow(fmax(0,dot(r, (world.camera.position - intersection_point).normalized())), specular_power);
 	}
-}
 
-return color;
+	return color;
 }
